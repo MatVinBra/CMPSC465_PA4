@@ -1,4 +1,4 @@
-
+#Matthew Brady (mvb5936), Arman Fatehi (aff5276), Matthew Balogh (mjb6723)
 class Graph:
     def __init__(self,vertices,edge_num,source):
         self.V_count = vertices # number of vertices in graph
@@ -12,38 +12,32 @@ class Graph:
 
     def BelmanFord(self):
         distance = [float('inf')] * self.V_count
-
-        distance[self.source] = 0
-
-        for i in range(self.V_count - 1):
+        prev = [None]*self.V_count
+        distance[self.source-1] = 0
+    
+        for x in range(self.V_count-1):
             for a,b,c in self.edges:
-                if distance[a] != float('inf') and distance[a] + c < distance[b]:
-                    distance[b] = distance[a] + c
+                if distance[a-1] != float("inf") and distance[a-1] + c < distance[b-1]:
+                    distance[b-1] = distance[a-1] + c
+                    prev[b-1] = a
 
-
+        #Check negative cycles
         for a,b,c in self.edges:
-            if distance[a] != float("inf") and distance[a] + c < distance[b]:
-                print('NG Found')
-                return False
-            return True
+            if distance[a-1] != float("inf") and distance[a-1] + c < distance[b-1]:
+                return True
+        return False
 
-# line1 = input().split()
-# vertices = int(line1[0])  #number of vertices from input   
-# edges = int(line1[1])     #number of edges python ./solution.py < input-x.txt > my-output-x.txtfrom input
-# source = int(line1[2])    #source vertex from input
+line1 = input().split()
+vertices = int(line1[0])  #number of vertices from input   
+edges = int(line1[1])     #number of edges python ./solution.py < input-x.txt > my-output-x.txtfrom input
+source = int(line1[2])    #source vertex from input
 
-Main_graph = Graph(4,6,3)
-# x = 1
-# while x <= edges:
-#     edge = input().split()
-#     Main_graph.add_edge(int(edge[0]),int(edge[1]),int(edge[2]))
-#     x+=1
+Main_graph = Graph(vertices,edges,source)
 
-Main_graph.add_edge(3 ,1 ,-2)
-Main_graph.add_edge(1 ,4 ,8)
-Main_graph.add_edge(1, 2, 0)
-Main_graph.add_edge(3, 4, -9)
-Main_graph.add_edge(3, 2, -10)
-Main_graph.add_edge(4, 3, 4)
+x = 1
+while x <= edges:
+    edge = input().split()
+    Main_graph.add_edge(int(edge[0]),int(edge[1]),int(edge[2]))
+    x+=1
 
 print(Main_graph.BelmanFord())
